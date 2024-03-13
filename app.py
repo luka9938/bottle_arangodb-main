@@ -1,18 +1,16 @@
-from bottle import delete, get, post, request, static_file, template
+from bottle import delete, get, post, put, request, static_file, template
 import x
 from icecream import ic
+import time
 
-##############################
 @get("/favicon.ico")
 def _():
     return static_file("favicon.ico", ".")
 
-##############################
 @get("/app.css")
 def _():
     return static_file("app.css", ".")
 
-##############################
 @get("/mixhtml.js")
 def _():
     return static_file("mixhtml.js", ".")
@@ -21,7 +19,7 @@ def _():
 def _():
     try:
         x.disable_cache()
-        users = x.db({"query" : "FOR user IN users RETURN user"})
+        users = x.db({"query": "FOR user IN users RETURN user"})
         ic(users)
         return template("index.html", users=users["result"])
     except Exception as ex:
@@ -30,13 +28,17 @@ def _():
     finally:
         pass
 
-##############################
 @post("/users")
 def _():
     try:
         user_name = x.validate_user_name()
-        user = {"name":user_name}
-        res = x.db({"query":"INSERT @doc IN users RETURN NEW", "bindVars":{"doc":user}})
+        # Get the current time in epoch format
+        current_time_epoch = int(time.time())
+        user = {
+            "name": user_name,
+            "updated_at": current_time_epoch  # Set updated_at to current time in epoch format
+        }
+        res = x.db({"query": "INSERT @doc IN users RETURN NEW", "bindVars": {"doc": user}})
         print(res)
         html = template("_user.html", user=res["result"][0])
         return f"""
@@ -56,7 +58,6 @@ def _():
         pass
 
 
-##############################
 @delete("/users/<key>")
 def _(key):
     try:
@@ -74,5 +75,3 @@ def _(key):
         ic(ex)
     finally:
         pass
-
-##############################
