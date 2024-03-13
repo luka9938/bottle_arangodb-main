@@ -10,7 +10,7 @@ services:
     ports:
       - 80:80
     volumes:
-      - C:\web\bottle_arango:/app
+      - /Users/lukas/Desktop/kea/Web_Dev/bottle_arangodb_main:/app
 
   arangodb:
     image: arangodb:3.11.3
@@ -21,6 +21,6 @@ services:
     environment:
       - ARANGO_NO_AUTH=1
     volumes:
-      - C:\web\bottle_arango\arangodb:/var/lib/arangodb3
+      - /Users/lukas/Desktop/kea/Web_Dev/bottle_arangodb_main/arangodb:/var/lib/arangodb3
 
 
