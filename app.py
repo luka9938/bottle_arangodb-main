@@ -32,10 +32,12 @@ def _():
 def _():
     try:
         user_name = x.validate_user_name()
+        last_name = request.forms.get("user_last_name")
         # Get the current time in epoch format
         current_time_epoch = int(time.time())
         user = {
             "name": user_name,
+            "last_name": last_name,
             "updated_at": current_time_epoch  # Set updated_at to current time in epoch format
         }
         res = x.db({"query": "INSERT @doc IN users RETURN NEW", "bindVars": {"doc": user}})
@@ -79,10 +81,12 @@ def _(key):
 def update_user(key):
     try:
         user_name = x.validate_user_name()
+        last_name = request.forms.get("user_last_name")
         # Get the current time in epoch format
         current_time_epoch = int(time.time())
         user = {
             "name": user_name,
+            "last_name": last_name,
             "updated_at": current_time_epoch  # Set updated_at to current time in epoch format
         }
         res = x.db({"query": "UPDATE @key WITH @doc IN users RETURN NEW", "bindVars": {"key": key, "doc": user}})
